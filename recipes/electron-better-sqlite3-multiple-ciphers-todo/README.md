@@ -1,4 +1,4 @@
-# Electron Encrypted SQLite Todo
+# Electron Todo with better-sqlite3-multiple-ciphers
 
 A small cross-platform Electron CRUD application backed by an encrypted SQLite database. It extends the minimal packaging recipe with [`better-sqlite3-multiple-ciphers`](https://github.com/m4heshd/better-sqlite3-multiple-ciphers) and packages the native module for macOS and Windows with `electron-builder`.
 
