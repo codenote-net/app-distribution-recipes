@@ -4,3 +4,4 @@ Recipes for building, signing, notarizing and distributing desktop (Linux/macOS/
 ## Recipes
 
 - [Electron Builder for macOS and Windows](recipes/electron-builder-macos-windows/README.md)
+- [Electron Encrypted SQLite Todo](recipes/electron-encrypted-sqlite-todo/README.md)
