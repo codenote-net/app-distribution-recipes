@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+    <title>JourneyApps SQLCipher Todo</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">JourneyApps SQLCipher</p>
+        <h1>Todo</h1>
+        <p class="intro">An encrypted Electron CRUD example for macOS.</p>
+      </header>
+
+      <form id="todo-form">
+        <label class="sr-only" for="todo-title">Todo title</label>
+        <input id="todo-title" name="title" maxlength="200" placeholder="What needs to be done?" required autofocus>
+        <button type="submit">Add todo</button>
+      </form>
+
+      <div class="toolbar">
+        <span id="todo-count">0 todos</span>
+        <span id="status" role="status" aria-live="polite"></span>
+      </div>
+
+      <ul id="todo-list" aria-label="Todo list"></ul>
+      <p id="empty-state">No todos yet. Add one above.</p>
+    </main>
+
+    <template id="todo-template">
+      <li>
+        <input class="toggle" type="checkbox" aria-label="Mark todo as complete">
+        <input class="title" maxlength="200" aria-label="Todo title">
+        <button class="save" type="button">Save</button>
+        <button class="delete" type="button">Delete</button>
+      </li>
+    </template>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
