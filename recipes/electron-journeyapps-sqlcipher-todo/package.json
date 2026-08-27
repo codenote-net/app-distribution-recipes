@@ -1,0 +1,55 @@
+{
+  "name": "electron-journeyapps-sqlcipher-todo-recipe",
+  "version": "1.0.0",
+  "description": "An Electron CRUD to-do app backed by JourneyApps SQLCipher.",
+  "main": "src/main.js",
+  "private": true,
+  "author": "CodeNote.net",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "electron scripts/smoke-test.js",
+    "build": "electron-builder --mac",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win --x64",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "@journeyapps/sqlcipher": "6.0.0"
+  },
+  "devDependencies": {
+    "electron": "44.0.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "net.codenote.appdistributionrecipes.journeyappssqlciphertodo",
+    "productName": "JourneyApps SQLCipher Todo",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/@journeyapps/sqlcipher/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
