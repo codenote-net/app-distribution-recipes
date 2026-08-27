@@ -1,0 +1,55 @@
+{
+  "name": "electron-encrypted-sqlite-todo-recipe",
+  "version": "1.0.0",
+  "description": "An Electron CRUD to-do app backed by encrypted SQLite.",
+  "main": "src/main.js",
+  "private": true,
+  "author": "CodeNote.net",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "electron scripts/smoke-test.js",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "better-sqlite3-multiple-ciphers": "13.0.3"
+  },
+  "devDependencies": {
+    "electron": "44.0.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "net.codenote.appdistributionrecipes.encryptedtodo",
+    "productName": "Encrypted Todo",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3-multiple-ciphers/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
