@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+    <title>System Info</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Electron runtime</p>
+      <h1>System Info</h1>
+      <p class="intro">Versions reported by the running application.</p>
+
+      <dl>
+        <div><dt>Platform</dt><dd id="platform">Loading…</dd></div>
+        <div><dt>Electron</dt><dd id="electron">Loading…</dd></div>
+        <div><dt>Chrome</dt><dd id="chrome">Loading…</dd></div>
+        <div><dt>Node.js</dt><dd id="node">Loading…</dd></div>
+      </dl>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>
