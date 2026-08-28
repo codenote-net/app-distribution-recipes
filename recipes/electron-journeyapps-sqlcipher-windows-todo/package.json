@@ -1,0 +1,50 @@
+{
+  "name": "electron-journeyapps-sqlcipher-windows-todo-recipe",
+  "version": "1.0.0",
+  "description": "An Electron CRUD to-do app with JourneyApps SQLCipher and a project-supplied Windows OpenSSL build.",
+  "main": "src/main.js",
+  "private": true,
+  "author": "CodeNote.net",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "electron scripts/smoke-test.js",
+    "build:mac": "electron-builder --mac",
+    "stage:win": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/stage-windows-openssl.ps1",
+    "build:win": "npm run stage:win && electron-builder install-app-deps && electron-builder --win --x64 --config.npmRebuild=false",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "dependencies": {
+    "@journeyapps/sqlcipher": "6.0.0"
+  },
+  "devDependencies": {
+    "electron": "44.0.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "net.codenote.appdistributionrecipes.journeyappssqlcipherwindowstodo",
+    "productName": "JourneyApps SQLCipher Windows Todo",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/@journeyapps/sqlcipher/**/*"
+    ],
+    "afterPack": "scripts/after-pack.js",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg", "zip"]
+    },
+    "win": {
+      "target": ["nsis", "portable"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
