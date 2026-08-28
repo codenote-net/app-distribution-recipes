@@ -1,0 +1,79 @@
+name: JourneyApps SQLCipher Windows recipe
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/journeyapps-sqlcipher-windows.yml"
+      - "recipes/electron-journeyapps-sqlcipher-windows-todo/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-x64:
+    runs-on: windows-2022
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: recipes/electron-journeyapps-sqlcipher-windows-todo
+
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 26.8.1
+          cache: npm
+          cache-dependency-path: recipes/electron-journeyapps-sqlcipher-windows-todo/package-lock.json
+
+      - name: Install pinned vcpkg and OpenSSL
+        shell: pwsh
+        env:
+          VCPKG_COMMIT: ddd0023b0eee70986e42ed49d9d4afb8098f212e
+        run: |
+          $vcpkgRoot = Join-Path $env:RUNNER_TEMP "vcpkg"
+          git clone --filter=blob:none https://github.com/microsoft/vcpkg.git $vcpkgRoot
+          git -C $vcpkgRoot checkout $env:VCPKG_COMMIT
+          & (Join-Path $vcpkgRoot "bootstrap-vcpkg.bat") -disableMetrics
+          & (Join-Path $vcpkgRoot "vcpkg.exe") install openssl:x64-windows --clean-after-build
+          "VCPKG_ROOT=$vcpkgRoot" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Install JavaScript dependencies without native lifecycle scripts
+        run: npm ci --ignore-scripts
+
+      - name: Restore Electron package lifecycle
+        run: npm rebuild electron
+
+      - name: Build Windows installer and portable executable
+        run: npm run build:win
+
+      - name: Test encrypted CRUD with the Windows addon
+        run: npm test
+
+      - name: Verify packaged native files
+        shell: pwsh
+        run: |
+          $unpacked = "dist/win-unpacked"
+          $addon = Get-ChildItem $unpacked -Recurse -Filter node_sqlite3.node -File
+          if ($addon.Count -ne 1) { throw "Expected one packaged SQLCipher addon, found $($addon.Count)." }
+          foreach ($dll in @("libcrypto-3-x64.dll", "libssl-3-x64.dll")) {
+            if (-not (Test-Path (Join-Path $unpacked $dll))) { throw "Missing packaged runtime: $dll" }
+          }
+
+      - name: Launch the packaged Windows application
+        shell: pwsh
+        run: |
+          $executable = "dist/win-unpacked/JourneyApps SQLCipher Windows Todo.exe"
+          $process = Start-Process -FilePath $executable -PassThru
+          Start-Sleep -Seconds 5
+          if ($process.HasExited) { throw "The packaged application exited with code $($process.ExitCode)." }
+          Stop-Process -Id $process.Id
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: journeyapps-sqlcipher-windows-x64
+          path: |
+            recipes/electron-journeyapps-sqlcipher-windows-todo/dist/JourneyApps SQLCipher Windows Todo Setup 1.0.0.exe
+            recipes/electron-journeyapps-sqlcipher-windows-todo/dist/JourneyApps SQLCipher Windows Todo 1.0.0.exe
+          if-no-files-found: error

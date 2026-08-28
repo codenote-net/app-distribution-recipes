@@ -6,3 +6,4 @@ Recipes for building, signing, notarizing and distributing desktop (Linux/macOS/
 - [Electron Builder for macOS and Windows](recipes/electron-builder-macos-windows/README.md)
 - [Electron Todo with better-sqlite3-multiple-ciphers](recipes/electron-better-sqlite3-multiple-ciphers-todo/README.md)
 - [Electron Todo with JourneyApps SQLCipher](recipes/electron-journeyapps-sqlcipher-todo/README.md)
+- [Electron Todo with JourneyApps SQLCipher and Windows OpenSSL](recipes/electron-journeyapps-sqlcipher-windows-todo/README.md)
