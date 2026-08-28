@@ -44,6 +44,8 @@ npm rebuild electron
 npm run build:win
 ```
 
+The `--force` flag is intentional: `@journeyapps/sqlcipher` 6.0.0 declares only macOS and Linux in its npm package metadata, so npm otherwise rejects installation on Windows before the project-supplied build can run. Lifecycle scripts remain disabled until the required Windows OpenSSL inputs have been staged.
+
 The build script stages OpenSSL into the paths expected by the package's public `binding.gyp`, rebuilds the addon for Electron x64, disables electron-builder's second rebuild, and copies the runtime DLLs into the packaged application.
 
 ## GitHub Actions
